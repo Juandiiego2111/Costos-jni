@@ -1,26 +1,35 @@
 package com.example.costosjni;
 
-import costosjni.lib.JavaCostos;
-import org.springframework.web.bind.annotation.*;
+import libcostos.JavaCostos;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/costosjni-service")
+@RequestMapping("/api/costos-jni")
 public class CostosRestController {
 
-    private JavaCostos javaCostos;
+    private final JavaCostos calculadora;
 
     public CostosRestController() {
-        this.javaCostos = new JavaCostos();
+        this.calculadora = new JavaCostos();
     }
 
-    @GetMapping("/costos/{costoFijo}/{costoVariable}/{cantidadProducida}/{margenGanancia}")
+    @GetMapping("/calcular")
     public String calcularCostos(
-            @PathVariable double costoFijo,
-            @PathVariable double costoVariable,
-            @PathVariable int cantidadProducida,
-            @PathVariable double margenGanancia
+            @RequestParam(name = "cfijo") float costoFijo,
+            @RequestParam(name = "cvariable") float costoVariable,
+            @RequestParam(name = "cindirecto") float costoIndirecto,
+            @RequestParam(name = "unidades") int unidadesProducidas,
+            @RequestParam(name = "margen") float margenGananciaPorcentaje
     ) {
-        return javaCostos.calcularCostosJSON(costoFijo, costoVariable, cantidadProducida, margenGanancia);
+        return calculadora.generarJSONCostos(
+                costoFijo,
+                costoVariable,
+                costoIndirecto,
+                unidadesProducidas,
+                margenGananciaPorcentaje
+        );
     }
 }
-
