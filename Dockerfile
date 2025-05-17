@@ -1,10 +1,8 @@
-FROM openjdk:23-slim
-RUN apt-get update && apt-get install -y libcjson-dev && rm -rf /var/lib/apt/lists
+FROM openjdk:21-slim
+RUN apt-get update && apt-get install -y libcjson1 libcjson-dev
 VOLUME /tmp
 EXPOSE 8080
 ARG JAR_FILE=target/costos-jni-0.0.1-SNAPSHOT.jar
-ADD ${JAR_FILE} app.jar
-RUN mkdir /root/aplicacion
+COPY ${JAR_FILE} app.jar
 COPY libcostos.so /usr/local/lib/
-ENV LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH
-ENTRYPOINT ["java", "-jar", "/app.jar"]
+ENTRYPOINT ["java", "-Djava.library.path=/usr/local/lib", "-jar", "app.jar"]
