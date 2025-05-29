@@ -2,7 +2,7 @@ services:
   spring-jni:
     image: 'juandiiego2111/costos-jni:latest'
     ports:
-      - '8083:8080'
+      - '8094:8094'
     networks:
       - red-backend-app
 networks:
